@@ -24,6 +24,11 @@ export interface ProvisionRequest {
   initialBalance: number;
 }
 
+export interface SetBonusRequest {
+  userId: string;
+  bonusSet: boolean;
+}
+
 export interface TransactionDocument extends TransactionRequest {
   timestamp: number;
 }

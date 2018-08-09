@@ -12,7 +12,7 @@ import { Container } from 'typedi';
 
 import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
 import {
-  BalancesDocument, DatabasesContainerToken, ProvisionRequest, TransactionRequest,
+  BalancesDocument, DatabasesContainerToken, ProvisionRequest, SetBonusRequest, TransactionRequest,
 } from '../services/db-container';
 import {
    AccessPropagation, canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow,
@@ -63,6 +63,39 @@ export class EconomyController {
           `Отправитель платежа: ${body.sender}`
             + ((body.description != undefined && body.description.length > 0)
               ? `, описание: "${body.description}"` : '')));
+      return {};
+    } catch (e) {
+      returnCharacterNotFoundOrRethrow(e);
+    }
+  }
+
+  @Post('/economy/set_bonus')
+  public async setBonus(
+    @CurrentUser() user: AliceAccount, @Body() body: SetBonusRequest,
+  ) {
+    try {
+      const bonuses = user.companyAccess.filter(((x) => x.isTopManager)).map((access) => access.companyName);
+
+      if (bonuses.length == 0) {
+        throw new BadRequestError('Только топ-менеджеры могут устанавливать премии');
+      }
+
+      body.userId = await canonicalId(body.userId);
+
+      const db = Container.get(DatabasesContainerToken).accountsDb();
+
+      await db.upsert(body.userId, (doc) => {
+        if (body.bonusSet) {
+          bonuses.forEach( (bonus) => doc.jobs.companyBonus.push(bonus));
+        } else {
+          doc.jobs.companyBonus = doc.jobs.companyBonus.filter((bonus) => !bonuses.includes(bonus));
+        }
+        return doc;
+      });
+
+      const action = body.bonusSet ? 'Установлена' : 'Снята';
+      await sendGenericPushNotification(body.userId,
+        makeVisibleNotificationPayload(`${action} премия от компании: ${bonuses.join(', ')}`));
       return {};
     } catch (e) {
       returnCharacterNotFoundOrRethrow(e);
