@@ -19,6 +19,8 @@ import {
 } from '../utils';
 
 import { AliceAccount } from '../models/alice-account';
+import { EconomyConstants } from '../models/economy-constants';
+import { calculateSalary } from '../services/salary-calculator';
 
 @JsonController()
 export class EconomyController {
@@ -104,13 +106,17 @@ export class EconomyController {
 
       const accounts = await Container.get(DatabasesContainerToken).accountsDb().allDocs({ include_docs: true });
 
-      // TODO non-human or dead accounts
       const db = Container.get(DatabasesContainerToken).economyDb();
+
+      const economyConstants = await db.get('constants') as EconomyConstants;
+
+      // TODO non-human or dead accounts
+
       await db.upsert('balances', (doc) => {
         accounts.rows.forEach((account) => {
           if (account.doc && doc[account.doc._id]) {
-            // TODO add salary formula
-            doc[account.doc._id] += 1;
+
+            doc[account.doc._id] += calculateSalary(account.doc, economyConstants);
           }
         });
         return doc;

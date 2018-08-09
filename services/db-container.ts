@@ -5,6 +5,7 @@ PouchDB.plugin(PouchDBFind);
 import { Token } from 'typedi';
 import { Connection } from '../connection';
 import { AliceAccount } from '../models/alice-account';
+import { EconomyConstants } from '../models/economy-constants';
 
 export interface ViewModel {
   timestamp: number;
@@ -42,7 +43,7 @@ export interface DatabasesContainerInterface {
   viewModelDb(type: string): PouchDB.Database<ViewModel>;
   eventsDb(): PouchDB.Database<{ timestamp: number }>;
 
-  economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument>;
+  economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>;
 }
 
 // tslint:disable-next-line:variable-name
@@ -56,7 +57,7 @@ export class DatabasesContainer implements DatabasesContainerInterface {
     protected _modelsDb: PouchDB.Database<{}>,
     protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
     protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
-    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>) {
+    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>) {
       const options = { since: 'now', live: true, include_docs: true, return_docs: false };
       this.viewModelDb('mobile').changes(options)
         .on('change', (change) => {

@@ -5,7 +5,7 @@ import { createEmptyAccount } from './test-db-container';
 
 import { calculateSalary } from '../services/salary-calculator';
 
-describe.only('Economy', () => {
+describe('Economy', () => {
 
     const economyConstants = {
         topManagerBase: 9000,
@@ -131,6 +131,18 @@ describe.only('Economy', () => {
 
         account.jobs.companyBonus.push('kkg');
         account.jobs.companyBonus.push('gd');
+
+        expect(calculateSalary(account, economyConstants)).to.be.equal(15100);
+    });
+
+    it.skip('Only humans should be able to get money', () => {
+        const account = createEmptyAccount();
+        account.companyAccess.push({companyName: 'kkg', isTopManager: true});
+
+        account.jobs.companyBonus.push('kkg');
+        account.jobs.companyBonus.push('gd');
+
+        // TODO understand how to filter humans / non-humans (extra property in account?)
 
         expect(calculateSalary(account, economyConstants)).to.be.equal(15100);
     });
