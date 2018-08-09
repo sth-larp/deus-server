@@ -18,13 +18,13 @@ import {
    AccessPropagation, canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow,
 } from '../utils';
 
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 
 @JsonController()
 export class EconomyController {
   @Post('/economy/transfer')
   public async transfer(
-    @CurrentUser() user: IAliceAccount, @Body() body: TransactionRequest,
+    @CurrentUser() user: AliceAccount, @Body() body: TransactionRequest,
   ) {
     try {
       body.sender = await canonicalId(body.sender);
@@ -68,7 +68,7 @@ export class EconomyController {
   }
 
   @Post('/economy/provision')
-  public async provision( @CurrentUser() user: IAliceAccount, @Body() body: ProvisionRequest) {
+  public async provision( @CurrentUser() user: AliceAccount, @Body() body: ProvisionRequest) {
     try {
       let { userId } = body;
 
@@ -98,7 +98,7 @@ export class EconomyController {
   }
 
   @Post('/economy/pay_salary')
-  public async paySalary( @CurrentUser() user: IAliceAccount) {
+  public async paySalary( @CurrentUser() user: AliceAccount) {
     try {
       await checkAccess(user, user._id, AccessPropagation.AdminOnly);
 
@@ -124,7 +124,7 @@ export class EconomyController {
   }
 
   @Get('/economy/:id')
-  public async get( @CurrentUser() user: IAliceAccount, @Param('id') id: string) {
+  public async get( @CurrentUser() user: AliceAccount, @Param('id') id: string) {
     id = await canonicalId(id);
     await checkAccess(user, id);
     const db = Container.get(DatabasesContainerToken).economyDb();

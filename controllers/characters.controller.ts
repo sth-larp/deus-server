@@ -2,7 +2,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 import { Body, CurrentUser, Get, JsonController, Param, Post } from 'routing-controllers';
 import { Container } from 'typedi';
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 import { DatabasesContainerToken } from '../services/db-container';
 import { ApplicationSettingsToken } from '../services/settings';
 import { AccessPropagation, canonicalId, canonicalIds, checkAccess,
@@ -17,7 +17,7 @@ interface ChangeAccessRightRequest {
 @JsonController()
 export class CharactersController {
   @Get('/characters/:id')
-  public async get( @CurrentUser() user: IAliceAccount, @Param('id') id: string) {
+  public async get( @CurrentUser() user: AliceAccount, @Param('id') id: string) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);
@@ -32,7 +32,7 @@ export class CharactersController {
 
   @Post('/characters/:id')
   public async post(
-     @CurrentUser() user: IAliceAccount,
+     @CurrentUser() user: AliceAccount,
      @Param('id') id: string,
      @Body() req: ChangeAccessRightRequest,
     ) {

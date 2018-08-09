@@ -10,12 +10,12 @@ import { DatabasesContainerToken } from '../services/db-container';
 import { AccessPropagation, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 import { EventsRequest } from './events.controller';
 
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 
 @JsonController()
 export class LocationEventsController {
   @Post('/location_events/:locationId')
-  public async post( @CurrentUser() user: IAliceAccount, @Param('locationId') locationId: string,
+  public async post( @CurrentUser() user: AliceAccount, @Param('locationId') locationId: string,
                      @Body() body: EventsRequest) {
     try {
       await checkAccess(user, '', AccessPropagation.AdminOnly);

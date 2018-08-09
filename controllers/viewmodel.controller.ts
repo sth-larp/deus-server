@@ -3,13 +3,13 @@ import { Container } from 'typedi';
 import { DatabasesContainerToken } from '../services/db-container';
 import { canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 
 @JsonController()
 export class ViewModelController {
 
   @Get('/viewmodel/:type/:id')
-  public async get(@CurrentUser() user: IAliceAccount, @Param('type') type: string, @Param('id') id: string) {
+  public async get(@CurrentUser() user: AliceAccount, @Param('type') type: string, @Param('id') id: string) {
     try {
       const dbContainer = Container.get(DatabasesContainerToken);
       id = await canonicalId(id);

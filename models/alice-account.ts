@@ -21,24 +21,24 @@ export interface SpecialPositions {
 
 export type Professions = CompanyPosition & SpecialPositions & TradeUnions;
 
-export interface ICompanyAccess {
+export interface CompanyAccess {
     isTopManager: boolean;
-    companyName: ICompany;
+    companyName: Company;
 }
 
-export type ICompany = 'gd' | 'pre' | 'kkg' | 'mat' | 'mst';
+export type Company = 'gd' | 'pre' | 'kkg' | 'mat' | 'mst';
 
-export interface IAliceAccount {
+export interface AliceAccount {
     _id: string;
     _rev?: string;
     password: string;
     login: string;
     professions: Professions;
-    companyAccess: ICompanyAccess[];
+    companyAccess: CompanyAccess[];
 
     jobs: {
         tradeUnion: TradeUnions;
-        companyBonus: ICompany[];
+        companyBonus: Company[];
     };
 
     access?: AccessEntry[];

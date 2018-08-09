@@ -5,7 +5,7 @@ import { Event, EventsProcessor } from '../events.processor';
 import { DatabasesContainerToken } from '../services/db-container';
 import { canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 
 interface RunLabTestsRequest {
   patientId: string;
@@ -25,7 +25,7 @@ interface ScanQrRequest {
 export class MedicController {
   @Post('/medic/run_lab_tests/:id')
   public async runLabTests(
-     @CurrentUser() user: IAliceAccount,
+     @CurrentUser() user: AliceAccount,
      @Param('id') id: string,
      @Body() req: RunLabTestsRequest,
      @Res() res: express.Response,
@@ -62,7 +62,7 @@ export class MedicController {
   }
 
   @Post('/medic/add_comment/:id')
-  public async addComment( @CurrentUser() user: IAliceAccount, @Param('id') id: string, @Body() req: AddCommentRequest,
+  public async addComment( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() req: AddCommentRequest,
                            @Res() res: express.Response) {
     try {
       id = await canonicalId(id);
@@ -93,7 +93,7 @@ export class MedicController {
   }
 
   @Post('/medic/scan_qr/:id')
-  public async scanQr( @CurrentUser() user: IAliceAccount, @Param('id') id: string, @Body() req: ScanQrRequest,
+  public async scanQr( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() req: ScanQrRequest,
                        @Res() res: express.Response) {
     try {
       id = await canonicalId(id);

@@ -9,7 +9,7 @@ import 'mocha';
 import { Container } from 'typedi';
 
 import App from '../app';
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
 import { ApplicationSettings, ApplicationSettingsToken, CheckForInactivitySettings,
@@ -95,7 +95,7 @@ describe('Mass push notifications', () => {
 
 });
 
-function createAccount(id: string, pushToken: string): IAliceAccount {
+function createAccount(id: string, pushToken: string): AliceAccount {
   return {
     ...createEmptyAccount(),
     _id: id,

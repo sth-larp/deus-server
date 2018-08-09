@@ -29,7 +29,7 @@ import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
 import { canonicalId, currentTimestamp, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
 
-import { IAliceAccount } from './models/alice-account';
+import { AliceAccount } from './models/alice-account';
 
 class App {
   private app: express.Express = express();
@@ -54,7 +54,7 @@ class App {
     });
 
     useExpressServer(this.app, {
-      currentUserChecker: async (action: Action): Promise<IAliceAccount | undefined> => {
+      currentUserChecker: async (action: Action): Promise<AliceAccount | undefined> => {
         const credentials = basic_auth(action.request);
         if (!credentials)
           throw new UnauthorizedError('No authorization provided');

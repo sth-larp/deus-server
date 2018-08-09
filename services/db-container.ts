@@ -4,7 +4,7 @@ import { TSMap } from 'typescript-map';
 PouchDB.plugin(PouchDBFind);
 import { Token } from 'typedi';
 import { Connection } from '../connection';
-import { IAliceAccount } from '../models/alice-account';
+import { AliceAccount } from '../models/alice-account';
 
 export interface ViewModel {
   timestamp: number;
@@ -37,7 +37,7 @@ export interface DatabasesContainerInterface {
 
   createIndices(): Promise<void>;
 
-  accountsDb(): PouchDB.Database<IAliceAccount>;
+  accountsDb(): PouchDB.Database<AliceAccount>;
   modelsDb(): PouchDB.Database<{}>;
   viewModelDb(type: string): PouchDB.Database<ViewModel>;
   eventsDb(): PouchDB.Database<{ timestamp: number }>;
@@ -52,7 +52,7 @@ export class DatabasesContainer implements DatabasesContainerInterface {
   public connections = new TSMap<string, Connection>();
 
   constructor(
-    protected _accountsDb: PouchDB.Database<IAliceAccount>,
+    protected _accountsDb: PouchDB.Database<AliceAccount>,
     protected _modelsDb: PouchDB.Database<{}>,
     protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
     protected _eventsDb: PouchDB.Database<{ timestamp: number }>,

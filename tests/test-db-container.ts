@@ -6,9 +6,9 @@ PouchDB.plugin(PouchDBUpsert);
 
 import { DatabasesContainer } from '../services/db-container';
 
-import { IAliceAccount, Professions } from '../models/alice-account';
+import { AliceAccount, Professions } from '../models/alice-account';
 
-export function createEmptyAccount(): IAliceAccount {
+export function createEmptyAccount(): AliceAccount {
   const trade = {
     isPilot: false,
     isNavigator: false,
